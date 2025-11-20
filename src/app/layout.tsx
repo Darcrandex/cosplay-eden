@@ -1,7 +1,13 @@
+import PageLoading from '@/components/PageLoading'
 import QueryProvider from '@/lib/QueryProvider'
+import { Metadata } from 'next'
+import { Suspense } from 'react'
 import './globals.css'
-import { Suspense } from 'react';
-import PageLoading from '@/components/PageLoading';
+
+export const metadata: Metadata = {
+  title: 'Cosplay Eden',
+  description: 'Cosplay Eden is a cosplay community where you can share your cosplay creations with others.'
+}
 
 export default function RootLayout({
   children

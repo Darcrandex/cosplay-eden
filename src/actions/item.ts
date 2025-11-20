@@ -10,8 +10,7 @@ import { getCosplayPostDetail } from './scrape'
 export async function getItemPage(params: { page?: number; pageSize?: number; keyword?: string }) {
   const page = params.page || 1
   const pageSize = params.pageSize || 10
-
-  const [{ total }] = await db.select({ total: count() }).from(itemTable)
+  const condition = params.keyword ? ilike(itemTable.title, `%${params.keyword}%`) : sql`true`
 
   const offset = (page - 1) * pageSize
   const columns = omit(getTableColumns(itemTable), ['imageList'])
@@ -21,7 +20,10 @@ export async function getItemPage(params: { page?: number; pageSize?: number; ke
     .limit(pageSize)
     .offset(offset)
     .orderBy(desc(itemTable.createdAt))
-    .where(params.keyword ? ilike(itemTable.title, `%${params.keyword}%`) : sql`true`)
+    .where(condition)
+
+  const [{ total }] = await db.select({ total: count() }).from(itemTable).where(condition)
+
   return { records, total }
 }
 

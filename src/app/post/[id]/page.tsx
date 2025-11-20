@@ -5,6 +5,7 @@ import PageLoading from '@/components/PageLoading'
 import TopHeader from '@/components/TopHeader'
 import { SourceType } from '@/constant/common'
 import { useQuery } from '@tanstack/react-query'
+import { useTitle } from 'ahooks'
 import { isNotNil } from 'es-toolkit'
 import { ArrowUpFromLine } from 'lucide-react'
 import Link from 'next/link'
@@ -22,6 +23,7 @@ export default function PostItem() {
     queryFn: () => getItemDetail(id)
   })
 
+  useTitle(data?.data?.title || 'Cosplay Eden')
   const sourceUrl = [SourceType.label(data?.data?.sourceType), data?.data?.sourceId].join('/')
 
   return (

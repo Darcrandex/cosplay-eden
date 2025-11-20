@@ -11,6 +11,8 @@ export default function Pagination(props: {
   const { total, pageSize, page, onPageChange } = props
   const pageCount = Math.ceil(total / pageSize)
 
+  if (pageCount <= 1) return null
+
   return (
     <ReactPaginate
       className="my-6 flex items-center justify-center gap-2 truncate select-none"
