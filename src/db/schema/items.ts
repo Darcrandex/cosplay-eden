@@ -2,7 +2,7 @@
 
 import { pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core'
 
-export const items = pgTable('items', {
+export const itemTable = pgTable('items', {
   sourceId: text().notNull(), // 套图的原始 id
   title: text().notNull(),
   coverImage: text(), // 套图的封面图片
@@ -12,3 +12,5 @@ export const items = pgTable('items', {
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull()
 })
+
+export type ItemSchema = typeof itemTable.$inferSelect
