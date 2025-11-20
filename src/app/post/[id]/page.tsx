@@ -6,7 +6,7 @@ import TopHeader from '@/components/TopHeader'
 import { SourceType } from '@/constant/common'
 import { useQuery } from '@tanstack/react-query'
 import { useTitle } from 'ahooks'
-import { isNotNil } from 'es-toolkit'
+import { isNil, isNotNil } from 'es-toolkit'
 import { ArrowUpFromLine } from 'lucide-react'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
@@ -18,7 +18,7 @@ import 'react-photo-view/dist/react-photo-view.css'
 
 export default function PostItem() {
   const { id = '' } = useParams<{ id: string }>()
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, isError } = useQuery({
     queryKey: ['post', 'item', id],
     queryFn: () => getItemDetail(id)
   })
@@ -31,9 +31,13 @@ export default function PostItem() {
       <section className="min-h-screen bg-sky-50/25 pb-1">
         <TopHeader />
 
-        {isLoading ? (
-          <PageLoading />
-        ) : (
+        {isLoading && <PageLoading />}
+        {isError && <p className="my-12 text-center text-lg text-red-500">error</p>}
+        {!isLoading && !isError && isNil(data?.data) && (
+          <p className="my-12 text-center text-lg text-gray-500">no data</p>
+        )}
+
+        {isNotNil(data?.data) && (
           <>
             <div className="relative flex h-96 items-center justify-center py-12">
               {isNotNil(data?.data?.coverImage) && (

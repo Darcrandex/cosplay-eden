@@ -1,4 +1,5 @@
 import { getCosplayPostList } from '@/actions/scrape'
+import { SourceType } from '@/constant/common'
 import { db } from '@/db'
 import { itemTable, type ItemSchema } from '@/db/schema/items'
 import type { NextRequest } from 'next/server'
@@ -13,13 +14,20 @@ export async function GET(request: NextRequest) {
 
   // 获取最新的帖子
   const res = await getCosplayPostList(1)
-  const batchData: Omit<ItemSchema, 'id' | 'createdAt' | 'updatedAt'>[] = res.map((v) => ({
-    sourceType: 'cosplaytele',
-    sourceId: v.id,
-    title: v.title,
-    coverImage: v.coverImage,
-    imageList: null
-  }))
+  const batchData: Omit<ItemSchema, 'id' | 'createdAt' | 'updatedAt'>[] = res.map((v, index) => {
+    const timestamp = new Date().getTime()
+    const createdAt = new Date(timestamp - index * 1000)
+
+    return {
+      sourceType: SourceType.Cosplaytele,
+      sourceId: v.id,
+      title: v.title,
+      coverImage: v.coverImage,
+      imageList: null,
+      createdAt,
+      updatedAt: createdAt
+    }
+  })
 
   await db.insert(itemTable).values(batchData).onConflictDoNothing()
 
