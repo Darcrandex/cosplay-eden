@@ -60,6 +60,7 @@ export async function getCosplayPostList(page: number): Promise<PostItemData[]> 
   }
 }
 
+// 爬取 cosplaytele 的文章详情
 export async function getCosplayPostDetail(id: string): Promise<PostDetail | null> {
   const targetUrl = `https://cosplaytele.com/${id}/`
 

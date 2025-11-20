@@ -1,6 +1,7 @@
 import QueryProvider from '@/lib/QueryProvider'
 import './globals.css'
 import { Suspense } from 'react';
+import PageLoading from '@/components/PageLoading';
 
 export default function RootLayout({
   children
@@ -10,7 +11,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <Suspense fallback={<p>loading...</p>}>
+        <Suspense fallback={<PageLoading />}>
           <QueryProvider>{children}</QueryProvider>
         </Suspense>
       </body>
