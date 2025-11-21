@@ -26,7 +26,8 @@
     "react-lazyload": "^3.2.1",
     "react-paginate": "^8.3.0",
     "react-photo-view": "^1.2.7",
-    "react-scroll-to-top": "^3.1.0"
+    "react-scroll-to-top": "^3.1.0",
+    "user-agents": "^1.1.669"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
@@ -34,6 +35,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@types/react-lazyload": "^3.2.3",
+    "@types/user-agents": "^1.0.4",
     "babel-plugin-react-compiler": "1.0.0",
     "eslint": "^9",
     "eslint-config-next": "16.0.3",

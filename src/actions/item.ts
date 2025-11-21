@@ -28,15 +28,20 @@ export async function getItemPage(params: { page?: number; pageSize?: number; ke
 }
 
 export async function getItemDetail(id: string) {
-  const [data] = await db.select().from(itemTable).where(eq(itemTable.id, id))
+  try {
+    const [data] = await db.select().from(itemTable).where(eq(itemTable.id, id))
 
-  if (data && !Array.isArray(data.imageList) && data.sourceType === SourceType.Cosplaytele) {
-    const res = await getCosplayPostDetail(data.sourceId)
-    const imageList = res?.imageList || []
+    if (data && !Array.isArray(data.imageList) && data.sourceType === SourceType.Cosplaytele) {
+      const res = await getCosplayPostDetail(data.sourceId)
+      const imageList = res?.imageList || []
 
-    await db.update(itemTable).set({ imageList }).where(eq(itemTable.id, id))
-    data.imageList = imageList
+      await db.update(itemTable).set({ imageList }).where(eq(itemTable.id, id))
+      data.imageList = imageList
+    }
+
+    return { data }
+  } catch (error) {
+    console.error('getItemDetail error', error)
+    return { data: null, error }
   }
-
-  return { data }
 }

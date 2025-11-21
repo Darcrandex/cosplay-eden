@@ -13,6 +13,7 @@ import { useParams } from 'next/navigation'
 import LazyLoad from 'react-lazyload'
 import ScrollToTop from 'react-scroll-to-top'
 
+import { useEffect } from 'react'
 import { PhotoProvider, PhotoView } from 'react-photo-view'
 import 'react-photo-view/dist/react-photo-view.css'
 
@@ -22,6 +23,10 @@ export default function PostItem() {
     queryKey: ['post', 'item', id],
     queryFn: () => getItemDetail(id)
   })
+
+  useEffect(() => {
+    console.log('debug post detail', data)
+  }, [data])
 
   useTitle(data?.data?.title || 'Cosplay Eden')
   const sourceUrl = [SourceType.label(data?.data?.sourceType), data?.data?.sourceId].join('/')
