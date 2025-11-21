@@ -6,6 +6,17 @@ import UserAgent from 'user-agents'
 export type PostItemData = { id: string; title: string; coverImage: string }
 export type PostDetail = { id: string; title: string; imageList: string[] }
 
+const initBrowser = async () => {
+  const browserArgs = [
+    '--no-sandbox', // 服务器环境必备：禁用沙箱（避免权限不足）
+    '--disable-setuid-sandbox', // 禁用 setuid 沙箱
+    '--disable-dev-shm-usage', // 禁用 /dev/shm 共享内存（Serverless 环境内存有限）
+    '--single-process' // 单进程模式（减少内存占用）
+  ]
+
+  return await chromium.launch({ headless: true, args: browserArgs })
+}
+
 // 爬取 cosplaytele 的分页内容
 export async function getCosplayPostList(page: number): Promise<PostItemData[]> {
   const targetUrl = `https://cosplaytele.com/page/${page}/`
@@ -14,7 +25,7 @@ export async function getCosplayPostList(page: number): Promise<PostItemData[]> 
   const randomUA = new UserAgent({ platform: 'Win32' }).toString()
 
   try {
-    browser = await chromium.launch({ headless: true, args: ['--no-sandbox', '--disable-setuid-sandbox'] })
+    browser = await initBrowser()
     const page = await browser.newPage({ userAgent: randomUA })
     await page.goto(targetUrl, { timeout: 30000 })
 
@@ -54,7 +65,7 @@ export async function getCosplayPostDetail(id: string): Promise<PostDetail | nul
   const randomUA = new UserAgent({ platform: 'Win32' }).toString()
 
   try {
-    browser = await chromium.launch({ headless: true, args: ['--no-sandbox', '--disable-setuid-sandbox'] })
+    browser = await initBrowser()
     const page = await browser.newPage({ userAgent: randomUA })
 
     console.log('/n开始爬取', targetUrl)
