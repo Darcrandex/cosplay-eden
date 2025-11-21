@@ -5,7 +5,7 @@ import { db } from '@/db'
 import { itemTable } from '@/db/schema/items'
 import { count, desc, eq, getTableColumns, ilike, sql } from 'drizzle-orm'
 import { omit } from 'es-toolkit'
-import { getCosplayPostDetail } from './scrape'
+import { getCosplayPostDetail2 } from './scrape'
 
 export async function getItemPage(params: { page?: number; pageSize?: number; keyword?: string }) {
   const page = params.page || 1
@@ -32,7 +32,7 @@ export async function getItemDetail(id: string) {
     const [data] = await db.select().from(itemTable).where(eq(itemTable.id, id))
 
     if (data && !Array.isArray(data.imageList) && data.sourceType === SourceType.Cosplaytele) {
-      const res = await getCosplayPostDetail(data.sourceId)
+      const res = await getCosplayPostDetail2(data.sourceId)
       const imageList = res?.imageList || []
 
       await db.update(itemTable).set({ imageList }).where(eq(itemTable.id, id))
