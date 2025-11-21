@@ -1,5 +1,5 @@
 {
-  "name": "cosplay-fk",
+  "name": "cosplay-eden",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -7,8 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx,css,md,json}\"",
-    "postinstall": "npx playwright install chromium"
+    "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx,css,md,json}\""
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.0.2",
@@ -23,7 +22,6 @@
     "es-toolkit": "^1.42.0",
     "lucide-react": "^0.554.0",
     "next": "16.0.3",
-    "playwright": "^1.56.1",
     "react": "19.2.0",
     "react-dom": "19.2.0",
     "react-lazyload": "^3.2.1",
@@ -40,6 +38,7 @@
     "@types/react-lazyload": "^3.2.3",
     "@types/user-agents": "^1.0.4",
     "babel-plugin-react-compiler": "1.0.0",
+    "depcheck": "^1.4.7",
     "eslint": "^9",
     "eslint-config-next": "16.0.3",
     "prettier": "^3.6.2",

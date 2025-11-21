@@ -1,47 +1,46 @@
-// import { getCosplayPostList } from '@/actions/scrape'
-// import { SourceType } from '@/constant/common'
-// import { db } from '@/db'
-// import { itemTable, type ItemSchema } from '@/db/schema/items'
-// import { delay } from 'es-toolkit'
-
-import { getCosplayPostList2, getCosplayPostDetail2 } from '@/actions/scrape'
+import { getCosplayPostList } from '@/actions/scrape'
+import { SourceType } from '@/constant/common'
+import { db } from '@/db'
+import { itemTable, type ItemSchema } from '@/db/schema/items'
+import { delay } from 'es-toolkit'
 
 export async function GET() {
-  // const task = async (page = 1) => {
-  //   const res = await getCosplayPostList(page)
+  if (process.env.NODE_ENV !== 'development') {
+    return Response.json({ message: 'not allow' })
+  }
 
-  //   const batchData: Omit<ItemSchema, 'id' | 'createdAt' | 'updatedAt'>[] = res.map((v, index) => {
-  //     const timestamp = new Date().getTime()
-  //     const oneDay = 24 * 60 * 60 * 1000
-  //     const createdAt = new Date(timestamp - index * 1000 - page * oneDay)
+  const task = async (page = 1) => {
+    const res = await getCosplayPostList(page)
 
-  //     return {
-  //       sourceType: SourceType.Cosplaytele,
-  //       sourceId: v.id,
-  //       title: v.title,
-  //       coverImage: v.coverImage,
-  //       imageList: null,
-  //       createdAt,
-  //       updatedAt: createdAt
-  //     }
-  //   })
+    const batchData: Omit<ItemSchema, 'id' | 'createdAt' | 'updatedAt'>[] = res.map((v, index) => {
+      const timestamp = new Date().getTime()
+      const oneDay = 24 * 60 * 60 * 1000
+      const createdAt = new Date(timestamp - index * 1000 - page * oneDay)
 
-  //   await db.insert(itemTable).values(batchData).onConflictDoNothing()
-  // }
+      return {
+        sourceType: SourceType.Cosplaytele,
+        sourceId: v.id,
+        title: v.title,
+        coverImage: v.coverImage,
+        imageList: null,
+        createdAt,
+        updatedAt: createdAt
+      }
+    })
 
-  // const tasks = async () => {
-  //   for (let i = 10; i >= 1; i--) {
-  //     const page = i + 60
-  //     await task(page)
-  //     console.log(`第${page}页数据插入完成`)
-  //     await delay(5 * 1000)
-  //   }
-  // }
+    await db.insert(itemTable).values(batchData).onConflictDoNothing()
+  }
 
-  // await tasks()
+  const tasks = async () => {
+    for (let i = 10; i >= 1; i--) {
+      const page = i + 90
+      await task(page)
+      console.log(`第${page}页数据插入完成`)
+      await delay(5 * 1000)
+    }
+  }
 
-  const res = await getCosplayPostDetail2('cinderella')
-  console.log('detail ===>', res)
+  await tasks()
 
   return Response.json({ message: 'insert success' })
 }
