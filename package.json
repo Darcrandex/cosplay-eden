@@ -15,6 +15,7 @@
     "ahooks": "^3.9.6",
     "axios": "^1.13.2",
     "cheerio": "^1.1.2",
+    "clsx": "^2.1.1",
     "dotenv": "^17.2.3",
     "drizzle-kit": "^0.31.7",
     "drizzle-orm": "0.44.6",
@@ -28,6 +29,7 @@
     "react-paginate": "^8.3.0",
     "react-photo-view": "^1.2.7",
     "react-scroll-to-top": "^3.1.0",
+    "tailwind-merge": "^3.4.0",
     "user-agents": "^1.1.669"
   },
   "devDependencies": {

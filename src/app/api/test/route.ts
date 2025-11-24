@@ -2,6 +2,7 @@ import { getCosplayPostList } from '@/actions/scrape'
 import { SourceType } from '@/constant/common'
 import { db } from '@/db'
 import { itemTable, type ItemSchema } from '@/db/schema/items'
+import { count } from 'drizzle-orm'
 import { delay } from 'es-toolkit'
 
 export async function GET() {
@@ -31,11 +32,15 @@ export async function GET() {
     await db.insert(itemTable).values(batchData).onConflictDoNothing()
   }
 
+  const [{ total }] = await db.select({ total: count() }).from(itemTable)
+  const pageSize = 12
+  const currentTotalPage = Math.ceil(total / pageSize)
+  const targetPage = currentTotalPage + 10
+
   const tasks = async () => {
-    for (let i = 10; i >= 1; i--) {
-      const page = i + 90
-      await task(page)
-      console.log(`第${page}页数据插入完成`)
+    for (let i = targetPage; i > currentTotalPage; i--) {
+      await task(i)
+      console.log(`第${i}页数据插入完成`)
       await delay(5 * 1000)
     }
   }

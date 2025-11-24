@@ -3,24 +3,17 @@
 import { getItemPage } from '@/actions/item'
 import PageLoading from '@/components/PageLoading'
 import Pagination from '@/components/Pagination'
+import SearchInput from '@/components/SearchInput'
 import TopHeader from '@/components/TopHeader'
 import { useQuery } from '@tanstack/react-query'
 import { isArray } from 'es-toolkit/compat'
-import { Search } from 'lucide-react'
 import Link from 'next/link'
 import { useState } from 'react'
 
 export default function Home() {
   const pageSize = 12
   const [page, setPage] = useState(1)
-  const [search, setSearch] = useState('')
   const [keyword, setKeyword] = useState('')
-  const handleSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      setKeyword(search)
-      setPage(1)
-    }
-  }
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ['home', 'item', 'page', page, keyword],
@@ -32,18 +25,7 @@ export default function Home() {
       <TopHeader />
 
       <section className="mx-auto w-5xl">
-        <div className="relative mx-auto my-6 w-96">
-          <Search className="absolute top-1/2 left-3 h-6 w-6 -translate-y-1/2 text-gray-400" />
-          <input
-            type="text"
-            placeholder="type and press enter"
-            className="block w-full rounded-md border border-gray-300 px-4 py-2 indent-8 text-lg text-gray-800 transition-all outline-none focus:border-transparent focus:ring-2 focus:ring-pink-500"
-            maxLength={15}
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            onKeyDown={handleSearch}
-          />
-        </div>
+        <SearchInput keyword={keyword} onSearch={setKeyword} />
 
         {isLoading && <PageLoading />}
         {isError && <p className="my-12 text-center text-lg text-red-500">error</p>}
