@@ -1,29 +1,26 @@
-'use client'
-
 import { getItemDetail } from '@/actions/item'
-import PageLoading from '@/components/PageLoading'
+import PostImageViewer from '@/components/PostImageViewer'
+import ScrollToTopButton from '@/components/ScrollToTopButton'
 import TopHeader from '@/components/TopHeader'
 import { SourceType } from '@/constant/common'
-import { useQuery } from '@tanstack/react-query'
-import { useTitle } from 'ahooks'
 import { isNil, isNotNil } from 'es-toolkit'
-import { ArrowUpFromLine } from 'lucide-react'
+import type { Metadata } from 'next'
 import Link from 'next/link'
-import { useParams } from 'next/navigation'
-import LazyLoad from 'react-lazyload'
-import ScrollToTop from 'react-scroll-to-top'
 
-import { PhotoProvider, PhotoView } from 'react-photo-view'
-import 'react-photo-view/dist/react-photo-view.css'
+type Props = {
+  params: Promise<{ id: string }>
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+}
 
-export default function PostItem() {
-  const { id = '' } = useParams<{ id: string }>()
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ['post', 'item', id],
-    queryFn: () => getItemDetail(id)
-  })
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { id } = await params
+  const data = await getItemDetail(id)
+  return { title: data?.data?.title || 'Cosplay Eden' }
+}
 
-  useTitle(data?.data?.title || 'Cosplay Eden')
+export default async function PostItem({ params }: Props) {
+  const { id = '' } = await params
+  const data = await getItemDetail(id)
   const sourceUrl = [SourceType.label(data?.data?.sourceType), data?.data?.sourceId].join('/')
 
   return (
@@ -31,11 +28,7 @@ export default function PostItem() {
       <section className="min-h-screen bg-sky-50/25 pb-1">
         <TopHeader />
 
-        {isLoading && <PageLoading />}
-        {isError && <p className="my-12 text-center text-lg text-red-500">error</p>}
-        {!isLoading && !isError && isNil(data?.data) && (
-          <p className="my-12 text-center text-lg text-gray-500">no data</p>
-        )}
+        {isNil(data?.data) && <p className="my-12 text-center text-lg text-gray-500">no data {id}</p>}
 
         {isNotNil(data?.data) && (
           <>
@@ -69,35 +62,23 @@ export default function PostItem() {
                 </p>
               </article>
 
-              <ol className="space-y-12">
-                {data?.data?.imageList?.map((v) => (
-                  <li key={v}>
-                    <LazyLoad height={500} offset={100} once>
-                      <PhotoProvider>
-                        <PhotoView src={v}>
-                          <img
-                            src={v}
-                            alt=""
-                            className="block h-auto w-full object-cover"
-                            referrerPolicy="no-referrer"
-                          />
-                        </PhotoView>
-                      </PhotoProvider>
-                    </LazyLoad>
-                  </li>
+              <PostImageViewer imageList={data.data.imageList || []} />
+
+              <nav>
+                {(data.data.imageList || []).map((url, index) => (
+                  <img
+                    key={url}
+                    src={url}
+                    alt={`${data.data.title} - Image ${index + 1}`}
+                    referrerPolicy="no-referrer"
+                    loading="eager"
+                    className="invisible hidden h-0 w-0"
+                  />
                 ))}
-              </ol>
+              </nav>
             </section>
 
-            <ScrollToTop
-              smooth
-              top={800}
-              component={
-                <div className="group/back-top flex h-full w-full items-center justify-center">
-                  <ArrowUpFromLine className="h-6 w-6 text-gray-800 transition-colors group-hover/back-top:text-pink-600" />
-                </div>
-              }
-            />
+            <ScrollToTopButton />
           </>
         )}
       </section>

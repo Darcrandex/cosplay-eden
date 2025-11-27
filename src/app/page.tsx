@@ -1,39 +1,37 @@
-'use client'
-
 import { getItemPage } from '@/actions/item'
-import PageLoading from '@/components/PageLoading'
-import Pagination from '@/components/Pagination'
-import SearchInput from '@/components/SearchInput'
+import PaginationServer from '@/components/PaginationServer'
+import SearchInputServer from '@/components/SearchInputServer'
 import TopHeader from '@/components/TopHeader'
-import { useQuery } from '@tanstack/react-query'
 import { isArray } from 'es-toolkit/compat'
 import Link from 'next/link'
-import { useState } from 'react'
 
-export default function Home() {
+export default async function HomePage({
+  searchParams
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>
+}) {
+  const params = await searchParams
+  const page = parseInt((params?.page as string) || '1')
+  const keyword = (params?.keyword as string) || ''
   const pageSize = 12
-  const [page, setPage] = useState(1)
-  const [keyword, setKeyword] = useState('')
 
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ['home', 'item', 'page', page, keyword],
-    queryFn: () => getItemPage({ page, pageSize, keyword })
-  })
+  const { records, total } = await getItemPage({ page, pageSize, keyword })
 
   return (
     <section className="min-h-screen bg-sky-50/25 pb-1">
       <TopHeader />
 
-      <section className="mx-auto w-5xl">
-        <SearchInput keyword={keyword} onSearch={setKeyword} />
+      <div className="container mx-auto px-4 py-8">
+        <div className="mb-8 flex justify-center">
+          <SearchInputServer keyword={keyword} />
+        </div>
 
-        {isLoading && <PageLoading />}
-        {isError && <p className="my-12 text-center text-lg text-red-500">error</p>}
-        {!isArray(data?.records) ||
-          (data?.records.length === 0 && <p className="my-12 text-center text-lg text-gray-500">no data</p>)}
+        {(!isArray(records) || records.length === 0) && (
+          <p className="my-12 text-center text-lg text-gray-500">no data</p>
+        )}
 
-        <ol className="my-12 grid grid-cols-3 gap-x-6 gap-y-12">
-          {data?.records.map((v) => (
+        <ol className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {records?.map((v) => (
             <li key={v.id} className="group/item">
               <Link href={`/post/${v.id}`} target="_blank">
                 <img
@@ -48,9 +46,11 @@ export default function Home() {
             </li>
           ))}
         </ol>
-      </section>
 
-      <Pagination total={data?.total || 0} pageSize={pageSize} page={page} onPageChange={(page) => setPage(page)} />
+        <div className="mt-12">
+          <PaginationServer pageCount={Math.ceil(total / pageSize)} currentPage={page} keyword={keyword} />
+        </div>
+      </div>
     </section>
   )
 }
