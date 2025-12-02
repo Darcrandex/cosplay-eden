@@ -1,7 +1,7 @@
 'use client'
 
-import ScrollToTop from 'react-scroll-to-top'
 import { ArrowUpFromLine } from 'lucide-react'
+import ScrollToTop from 'react-scroll-to-top'
 
 export default function ScrollToTopButton() {
   return (

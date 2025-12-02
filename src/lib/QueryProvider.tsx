@@ -12,8 +12,8 @@ let browserQueryClient: QueryClient | undefined = undefined
 function makeQueryClient() {
   return new QueryClient({
     defaultOptions: {
-      queries: { retry: false, refetchOnWindowFocus: false }
-    }
+      queries: { retry: false, refetchOnWindowFocus: false },
+    },
   })
 }
 

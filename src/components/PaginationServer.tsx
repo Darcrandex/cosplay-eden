@@ -1,6 +1,6 @@
 'use client'
 
-import { ArrowLeft, ArrowRight, Ellipsis ,ChevronLeft, ChevronRight,} from 'lucide-react'
+import { ChevronLeft, ChevronRight, Ellipsis } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import ReactPaginate from 'react-paginate'
 

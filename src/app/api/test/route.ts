@@ -25,7 +25,7 @@ export async function GET() {
         coverImage: v.coverImage,
         imageList: null,
         createdAt,
-        updatedAt: createdAt
+        updatedAt: createdAt,
       }
     })
 

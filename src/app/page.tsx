@@ -6,7 +6,7 @@ import { isArray } from 'es-toolkit/compat'
 import Link from 'next/link'
 
 export default async function HomePage({
-  searchParams
+  searchParams,
 }: {
   searchParams: Promise<Record<string, string | string[] | undefined>>
 }) {
@@ -37,7 +37,7 @@ export default async function HomePage({
                 <img
                   src={v.coverImage || ''}
                   alt={v.title}
-                  className="h-48 w-full rounded-lg bg-gray-200 object-cover transition-shadow group-hover/item:shadow-lg"
+                  className="w-full rounded-lg bg-gray-200 object-cover transition-shadow group-hover/item:shadow-lg md:h-48 lg:h-56"
                 />
                 <p className="mt-2 text-base text-gray-800 transition-colors group-hover/item:text-pink-600">
                   {v.title}

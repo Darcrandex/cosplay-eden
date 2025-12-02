@@ -19,8 +19,8 @@ export async function getCosplayPostList(page: number): Promise<PostItemData[]> 
       headers: {
         'User-Agent': randomUA,
         Accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-        'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8'
-      }
+        'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8',
+      },
     })
 
     if (!response.status || response.status !== 200) {
@@ -63,8 +63,8 @@ export async function getCosplayPostDetail(id: string): Promise<PostDetail | nul
       headers: {
         'User-Agent': randomUA,
         Accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-        'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8'
-      }
+        'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8',
+      },
     })
 
     if (!response.status || response.status !== 200) {

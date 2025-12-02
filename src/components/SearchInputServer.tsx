@@ -1,38 +1,38 @@
-'use client';
+'use client'
 
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { cls } from '@/utils/cls';
-import { CircleX, Search } from 'lucide-react';
+import { cls } from '@/utils/cls'
+import { CircleX, Search } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
 
 export default function SearchInputServer({ keyword = '' }: { keyword?: string }) {
-  const [searchTerm, setSearchTerm] = useState(keyword);
-  const router = useRouter();
+  const [searchTerm, setSearchTerm] = useState(keyword)
+  const router = useRouter()
 
   useEffect(() => {
-    setSearchTerm(keyword);
-  }, [keyword]);
+    setSearchTerm(keyword)
+  }, [keyword])
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const url = new URL(window.location.href);
+    e.preventDefault()
+    const url = new URL(window.location.href)
     if (searchTerm.trim()) {
-      url.searchParams.set('keyword', searchTerm.trim());
+      url.searchParams.set('keyword', searchTerm.trim())
     } else {
-      url.searchParams.delete('keyword');
+      url.searchParams.delete('keyword')
     }
-    url.searchParams.delete('page');
-    
-    router.replace(url.pathname + url.search);
-  };
+    url.searchParams.delete('page')
+
+    router.replace(url.pathname + url.search)
+  }
 
   const handleClear = () => {
-    setSearchTerm('');
-    const url = new URL(window.location.href);
-    url.searchParams.delete('keyword');
-    url.searchParams.delete('page');
-    router.replace(url.pathname + url.search);
-  };
+    setSearchTerm('')
+    const url = new URL(window.location.href)
+    url.searchParams.delete('keyword')
+    url.searchParams.delete('page')
+    router.replace(url.pathname + url.search)
+  }
 
   return (
     <div className={cls('relative mx-auto my-6 w-xl')}>
@@ -48,7 +48,7 @@ export default function SearchInputServer({ keyword = '' }: { keyword?: string }
           maxLength={20}
           onKeyDown={(e) => {
             if (e.key === 'Enter') {
-              handleSubmit(e);
+              handleSubmit(e)
             }
           }}
         />
@@ -61,5 +61,5 @@ export default function SearchInputServer({ keyword = '' }: { keyword?: string }
         />
       )}
     </div>
-  );
+  )
 }

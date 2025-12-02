@@ -4,6 +4,6 @@ import { Enum } from 'enum-plus'
 export const SourceType = Enum({
   Cosplaytele: {
     value: 'cosplaytele',
-    label: 'https://cosplaytele.com'
-  }
+    label: 'https://cosplaytele.com',
+  },
 })

@@ -11,7 +11,7 @@ export const itemTable = pgTable('items', {
 
   id: uuid().primaryKey().defaultRandom(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
-  updatedAt: timestamp('updated_at').defaultNow().notNull()
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
 })
 
 export type ItemSchema = typeof itemTable.$inferSelect

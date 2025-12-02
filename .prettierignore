@@ -1,0 +1,14 @@
+# Ignore generated files
+.next
+.out
+.next/**
+node_modules
+dist
+build
+coverage
+# Ignore specific files
+*.min.js
+*.min.css
+package-lock.json
+yarn.lock
+pnpm-lock.yaml

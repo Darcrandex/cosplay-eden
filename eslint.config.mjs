@@ -11,16 +11,16 @@ const eslintConfig = defineConfig([
     '.next/**',
     'out/**',
     'build/**',
-    'next-env.d.ts'
+    'next-env.d.ts',
   ]),
 
   {
     rules: {
       '@next/next/no-img-element': 'off',
       '@typescript-eslint/no-explicit-any': 'off',
-      '@typescript-eslint/ban-ts-comment': 'off'
-    }
-  }
+      '@typescript-eslint/ban-ts-comment': 'off',
+    },
+  },
 ])
 
 export default eslintConfig
